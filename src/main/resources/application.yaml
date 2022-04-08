@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3510/cryptogate
+    username: cryptogate
+    password: cryptogate
+    driver-class-name: org.mariadb.jdbc.Driver
+
+server:
+  port: 8810
+
+refresh:
+  etherscan:
+    cron: "*/2 * * * * *"
