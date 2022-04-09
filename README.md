@@ -7,3 +7,12 @@ docker stop mariadb-cryptogate & docker run --rm --name mariadb-cryptogate -e MY
 ```shell
 docker stop phpmyadmin-cryptogate & docker run --rm --name phpmyadmin-cryptogate -d -e PMA_USER=cryptogate -e PMA_PASSWORD=cryptogate --link mariadb-cryptogate:db -p 8510:80 phpmyadmin
 ```
+
+Задача принять крипту и ответить коллбеком о статусе платежа
+Создаем платеж на указанную сумму
+
+храним список адресов на которые принимаем платежи
+запрос на создание платежа от мерчанта
+выбираем адрес на который примем платеж
+создаем платеж в базе
+
