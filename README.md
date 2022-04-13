@@ -16,3 +16,7 @@ docker stop phpmyadmin-cryptogate & docker run --rm --name phpmyadmin-cryptogate
 выбираем адрес на который примем платеж
 создаем платеж в базе
 
+    val realBalance = BigDecimal(balance.balance).divide(BigDecimal(1000000000000000000L), 18, RoundingMode.HALF_UP)
+
+    val b = BigDecimal("0.006467745803757")
+    val bi = b.multiply(BigDecimal(1000000000000000000L)).toBigInteger()

@@ -3,7 +3,11 @@ package com.crypt.gate.controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+/**
+ * Торговцы
+ */
 @RestController
-@RequestMapping("/api")
-class ApiController {
+@RequestMapping("/api/merchant")
+class MerchantController {
+
 }
