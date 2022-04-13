@@ -13,6 +13,5 @@ class EtherscanRefresh {
 
     @Scheduled(cron = "\${refresh.etherscan.cron}")
     fun run() {
-        println("shce")
     }
 }

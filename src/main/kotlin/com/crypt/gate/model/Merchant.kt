@@ -11,7 +11,7 @@ class Merchant(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @Column(nullable = false)
+    @Column()
     val name: String
 
 )

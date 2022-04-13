@@ -1,0 +1,10 @@
+POST http://localhost:8810/api/payment
+Content-Type: application/json
+
+{
+  "currency": "ETH",
+  "amount": "0.01",
+  "merchantId": 1
+}
+
+###

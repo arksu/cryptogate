@@ -1,5 +1,6 @@
 package com.crypt.gate.model
 
+import java.math.BigInteger
 import javax.persistence.*
 
 /**
@@ -16,7 +17,7 @@ class Payment(
     val currency: PaymentCurrency,
 
     @Column(nullable = false)
-    val amount : Long,
+    val amount: BigInteger,
 
     @ManyToOne(optional = false)
     val merchant: Merchant
