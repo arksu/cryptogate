@@ -11,18 +11,21 @@ spring:
   jpa:
     generate-ddl: true
     show-sql: true
-    use_sql_comments: true
-    properties.hibernate.format_sql: true
-    properties.hibernate.use_sql_comments: true
-    properties.hibernate.jdbc.lob.non_contextual_creation: true
-    properties.hibernate.dialect: org.hibernate.dialect.MariaDB103Dialect
-
     open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        jdbc.lob.non_contextual_creation: true
+        dialect: org.hibernate.dialect.MariaDB106Dialect
 
     hibernate:
       ddl-auto: update
       naming.implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
       naming.physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+
+logging.level.org.springframework.jdbc.core.JdbcTemplate: DEBUG
+logging.level.org.springframework.jdbc.core.StatementCreatorUtils: TRACE
 
 refresh:
   etherscan:
