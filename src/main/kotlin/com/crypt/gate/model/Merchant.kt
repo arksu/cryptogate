@@ -1,17 +1,15 @@
 package com.crypt.gate.model
 
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
 
-/**
- * Покупатель
- */
 @Entity
 class Merchant(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     val id: Long = 0,
 
-    @Column()
-    val name: String
-
+    @Column(nullable = false)
+    var name: String
 )

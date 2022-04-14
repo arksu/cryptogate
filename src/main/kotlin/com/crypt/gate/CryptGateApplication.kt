@@ -7,7 +7,9 @@ import java.util.*
 
 @SpringBootApplication
 @EnableScheduling
-class CryptGateApplication
+class CryptGateApplication {
+
+}
 
 fun main(args: Array<String>) {
     Locale.setDefault(Locale.ROOT)

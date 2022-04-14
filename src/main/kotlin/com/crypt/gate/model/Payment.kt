@@ -10,16 +10,16 @@ import javax.persistence.*
 class Payment(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     val id: Long = 0,
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     val currency: PaymentCurrency,
 
-    @Column(nullable = false)
-    val amount: BigInteger,
+//    @Column(nullable = false)
+//    val amount: BigInteger,
 
-    @ManyToOne(optional = false)
-    val merchant: Merchant
-
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    var merchant: Merchant
 )

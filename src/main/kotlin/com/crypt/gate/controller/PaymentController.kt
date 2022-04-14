@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.math.BigDecimal
 
 /**
  * Создание и работа с платежами
@@ -21,16 +20,16 @@ class PaymentController(
     val merchantRepo: MerchantRepo
 ) {
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun createPayment(@RequestBody paymentDTO: PaymentDTO): PaymentDTO {
-
+    fun createPayment(
+        @RequestBody paymentDTO: PaymentDTO
+    ) {
         paymentRepo.save(
             Payment(
                 currency = paymentDTO.currency,
-                amount = paymentDTO.amount.multiply(BigDecimal(1000000000000000000L)).toBigInteger(),
+//                amount = paymentDTO.amount.multiply(BigDecimal(1000000000000000000L)).toBigInteger(),
                 merchant = merchantRepo.getReferenceById(paymentDTO.merchantId)
             )
         )
 
-        return paymentDTO
     }
 }
