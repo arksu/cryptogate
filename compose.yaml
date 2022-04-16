@@ -1,0 +1,26 @@
+services:
+  db:
+    image: mariadb:10.7
+    ports:
+      - 3510:3306
+    restart: always
+    volumes:
+      - mariadb_cryptogate:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=cryptogate
+      - MYSQL_USER=cryptogate
+      - MYSQL_PASSWORD=cryptogate
+      - MYSQL_ROOT_PASSWORD=cryptogate
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - 8510:80
+    depends_on:
+      - db
+    environment:
+      - PMA_USER=cryptogate
+      - PMA_PASSWORD=cryptogate
+
+volumes:
+  mariadb_cryptogate:
