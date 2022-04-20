@@ -1,14 +1,13 @@
 package com.crypt.gate.controller
 
 import com.crypt.gate.dto.PaymentDTO
+import com.crypt.gate.dto.toPaymentDTO
 import com.crypt.gate.model.Payment
 import com.crypt.gate.repo.MerchantRepo
 import com.crypt.gate.repo.PaymentRepo
+import com.crypt.gate.util.Eth
 import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 /**
  * Создание и работа с платежами
@@ -19,17 +18,24 @@ class PaymentController(
     val paymentRepo: PaymentRepo,
     val merchantRepo: MerchantRepo
 ) {
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun createPayment(
-        @RequestBody paymentDTO: PaymentDTO
-    ) {
-        paymentRepo.save(
-            Payment(
-                currency = paymentDTO.currency,
-//                amount = paymentDTO.amount.multiply(BigDecimal(1000000000000000000L)).toBigInteger(),
-                merchant = merchantRepo.getReferenceById(paymentDTO.merchantId)
+    /**
+     * Создать платеж
+     */
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun createPayment(@RequestBody paymentDTO: PaymentDTO): PaymentDTO {
+        return toPaymentDTO(
+            paymentRepo.save(
+                Payment(
+                    currency = paymentDTO.currency,
+                    amount = Eth.bigDecimalToBigInteger(paymentDTO.amount),
+                    merchant = merchantRepo.getReferenceById(paymentDTO.merchantId)
+                )
             )
         )
+    }
 
+    @GetMapping
+    fun getPaymentStatus() {
+        // TODO
     }
 }

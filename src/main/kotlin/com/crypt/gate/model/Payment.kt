@@ -17,8 +17,8 @@ class Payment(
     @Column(nullable = false)
     val currency: PaymentCurrency,
 
-//    @Column(nullable = false)
-//    val amount: BigInteger,
+    @Column(nullable = false, columnDefinition = "DECIMAL(22,2)")
+    val amount: BigInteger,
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     var merchant: Merchant
