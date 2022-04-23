@@ -9,4 +9,6 @@ Content-Type: application/json
 ###
 GET http://localhost:8810/api/payment/1
 ###
+GET http://localhost:8810/api/payment/555
+###
 GET http://localhost:8810/api/payment/fd
