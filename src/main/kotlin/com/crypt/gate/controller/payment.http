@@ -6,5 +6,7 @@ Content-Type: application/json
   "amount": "0.01",
   "merchantId": 1
 }
-
 ###
+GET http://localhost:8810/api/payment/1
+###
+GET http://localhost:8810/api/payment/fd

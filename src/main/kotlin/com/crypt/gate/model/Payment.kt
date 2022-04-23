@@ -17,7 +17,11 @@ class Payment(
     @Column(nullable = false)
     val currency: PaymentCurrency,
 
-    @Column(nullable = false, columnDefinition = "DECIMAL(22,2)")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    var status: PaymentStatus,
+
+    @Column(nullable = false, columnDefinition = "DECIMAL(22,0)")
     val amount: BigInteger,
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

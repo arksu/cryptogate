@@ -2,7 +2,9 @@ package com.crypt.gate.controller
 
 import com.crypt.gate.dto.PaymentDTO
 import com.crypt.gate.dto.toPaymentDTO
+import com.crypt.gate.exception.ResourceNotFoundException
 import com.crypt.gate.model.Payment
+import com.crypt.gate.model.PaymentStatus
 import com.crypt.gate.repo.MerchantRepo
 import com.crypt.gate.repo.PaymentRepo
 import com.crypt.gate.util.Eth
@@ -28,14 +30,16 @@ class PaymentController(
                 Payment(
                     currency = paymentDTO.currency,
                     amount = Eth.bigDecimalToBigInteger(paymentDTO.amount),
-                    merchant = merchantRepo.getReferenceById(paymentDTO.merchantId)
+                    merchant = merchantRepo.getReferenceById(paymentDTO.merchantId),
+                    status = PaymentStatus.WAITING
                 )
             )
         )
     }
 
-    @GetMapping
-    fun getPaymentStatus() {
-        // TODO
+    @GetMapping("{id}")
+    fun getPayment(@PathVariable id: String): PaymentDTO {
+        val payment = paymentRepo.findById(id.toLong())
+        return toPaymentDTO(payment.orElseThrow { ResourceNotFoundException() })
     }
 }
