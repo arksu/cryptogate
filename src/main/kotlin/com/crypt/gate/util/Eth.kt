@@ -1,9 +1,10 @@
 package com.crypt.gate.util
 
-import com.crypt.gate.const.ETH_MULTIPLIER
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
+
+const val ETH_MULTIPLIER = 1000000000000000000L
 
 object Eth {
     fun bigDecimalToBigInteger(amount: BigDecimal): BigInteger {

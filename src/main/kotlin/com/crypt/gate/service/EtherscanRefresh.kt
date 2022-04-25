@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service
  * Обновление данных с etherscan
  */
 @Service
-@ConditionalOnProperty(prefix = "refresh.etherscan", name = ["enabled"], matchIfMissing = false)
+@ConditionalOnProperty(prefix = "cryptogate.refresh.etherscan", name = ["enabled"], matchIfMissing = false)
 class EtherscanRefresh {
 
-    @Scheduled(cron = "\${refresh.etherscan.cron}")
+    @Scheduled(cron = "\${cryptogate.refresh.etherscan.cron}")
     fun run() {
     }
 }

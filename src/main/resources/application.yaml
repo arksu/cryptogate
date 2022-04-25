@@ -29,7 +29,12 @@ spring:
 logging.level.org.springframework.jdbc.core.JdbcTemplate: DEBUG
 logging.level.org.springframework.jdbc.core.StatementCreatorUtils: TRACE
 
-refresh:
-  etherscan:
-    enabled: true
-    cron: "*/2 * * * * *"
+cryptogate:
+  eth:
+    wallets:
+      - "0x222"
+      - "0x333"
+  refresh:
+    etherscan:
+      enabled: true
+      cron: "*/2 * * * * *"

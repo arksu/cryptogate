@@ -25,5 +25,17 @@ class Payment(
     val amount: BigInteger,
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    var merchant: Merchant
+    var merchant: Merchant,
+
+    /**
+     * Ссылка, которую дернем когда изменится статус платежа
+     */
+    @Column(nullable = false)
+    var callbackUrl : String,
+
+    /**
+     * Адрес кошелька на который ждем оплату
+     */
+    @Column(nullable = false)
+    var walletAddress : String,
 )
