@@ -6,16 +6,17 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import java.math.BigDecimal
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.NotNull
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-class PaymentDTO(
-    val id: Long,
-    val currency: PaymentCurrency,
-    val amount: BigDecimal,
-    val merchantId: Long,
-    val status: PaymentStatus?,
+data class PaymentDTO(
+    var id: Long,
+    var currency: PaymentCurrency,
+    var amount: BigDecimal,
+    var merchantId: Long,
+    var status: PaymentStatus?,
 
-    @NotEmpty(message = "sdsad")
-    @NotBlank(message = "211111")
-    val callbackUrl: String
+    @field:NotNull(message = "sdsad")
+//    @field:NotBlank(message = "211111")
+    var callbackUrl: String?
 )

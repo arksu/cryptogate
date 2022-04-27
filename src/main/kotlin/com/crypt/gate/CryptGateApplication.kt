@@ -9,9 +9,7 @@ import java.util.*
 
 @SpringBootApplication
 @EnableScheduling
-@EnableConfigurationProperties(
-    value = [CryptogateConfig::class]
-)
+@EnableConfigurationProperties(value = [CryptogateConfig::class])
 class CryptGateApplication {
 
 }

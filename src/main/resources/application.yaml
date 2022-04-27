@@ -2,6 +2,9 @@ server:
   port: 8810
   error:
     include-message: always
+    include-binding-errors: always
+    include-exception: true
+    include-stacktrace: always
 
 spring:
   datasource:

@@ -39,7 +39,7 @@ class PaymentController(
                     amount = Eth.bigDecimalToBigInteger(paymentDTO.amount),
                     merchant = merchantRepo.getReferenceById(paymentDTO.merchantId),
                     status = PaymentStatus.WAITING,
-                    callbackUrl = paymentDTO.callbackUrl,
+                    callbackUrl = paymentDTO.callbackUrl!!,
                     walletAddress = "!2"
                 )
             )
