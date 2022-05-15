@@ -5,7 +5,6 @@ import com.crypt.gate.model.PaymentStatus
 import com.fasterxml.jackson.annotation.JsonInclude
 import java.math.BigDecimal
 import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -16,7 +15,7 @@ data class PaymentDTO(
     var merchantId: Long,
     var status: PaymentStatus?,
 
-    @field:NotNull(message = "sdsad")
-//    @field:NotBlank(message = "211111")
+    @field:NotNull(message = "Must not be null")
+    @field:NotBlank(message = "Can't be blank")
     var callbackUrl: String?
 )

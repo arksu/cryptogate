@@ -53,6 +53,6 @@ class PaymentController(
     fun getPayment(@PathVariable id: String): PaymentDTO {
         // TODO проверять можно ли смотреть статус этого ид (надо указать данные мерчанта)
         val payment = paymentRepo.findById(id.toLong())
-        return toPaymentDTO(payment.orElseThrow { ResourceNotFoundException() })
+        return toPaymentDTO(payment.orElseThrow { ResourceNotFoundException("payment not found") })
     }
 }

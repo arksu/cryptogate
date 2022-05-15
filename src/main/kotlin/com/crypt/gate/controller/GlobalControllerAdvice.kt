@@ -1,63 +1,65 @@
 package com.crypt.gate.controller
 
+import com.crypt.gate.dto.ApiError
+import com.crypt.gate.exception.ResourceNotFoundException
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.validation.FieldError
-import org.springframework.validation.ObjectError
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.context.request.WebRequest
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 
 @ControllerAdvice
-class GlobalControllerAdvice : ResponseEntityExceptionHandler() {
+class GlobalControllerAdvice {
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Wrong number format")
     @ExceptionHandler(NumberFormatException::class)
-    fun handleNumberFormatException() {
+    fun handleNumberFormatException(ex: NumberFormatException): ResponseEntity<Any?>? {
+        val apiError = ApiError(
+            HttpStatus.BAD_REQUEST, ex.localizedMessage, "Wrong number format"
+        )
+        return ResponseEntity(apiError, HttpHeaders(), apiError.status)
     }
 
-//    @ExceptionHandler(MethodArgumentNotValidException::class)
-//    fun bbb(): ResponseEntity<Any> {
-//        return ResponseEntity(HttpStatus.CREATED)
-//    }
+    @ExceptionHandler(ResourceNotFoundException::class)
+    fun handleNotFound(ex: ResourceNotFoundException): ResponseEntity<Any?>? {
+        val apiError = ApiError(
+            HttpStatus.NOT_FOUND, ex.localizedMessage, "Not found"
+        )
+        return ResponseEntity(apiError, HttpHeaders(), apiError.status)
+    }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleValidationExceptionsFF(ex: MethodArgumentNotValidException, request: WebRequest): Map<String, String?>? {
-        val errors: MutableMap<String, String?> = HashMap()
-        ex.bindingResult.allErrors.forEach { error: ObjectError ->
-            val fieldName = (error as FieldError).field
-            val errorMessage = error.getDefaultMessage()
-            errors[fieldName] = errorMessage
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @RequestMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun handleNotValid(ex: MethodArgumentNotValidException): ResponseEntity<ApiError> {
+        val fieldErrors = ex.bindingResult.fieldErrors
+        val globalErrors = ex.bindingResult.globalErrors
+        val errors: MutableList<String> = ArrayList(fieldErrors.size + globalErrors.size)
+        for (fieldError in fieldErrors) {
+            errors.add("${fieldError.objectName}.${fieldError.field} : ${fieldError.defaultMessage}, rejected value [${fieldError.rejectedValue}]")
         }
-        return errors
+        for (objectError in globalErrors) {
+            errors.add("${objectError.objectName} : ${objectError.defaultMessage}")
+        }
+
+        val apiError = ApiError(HttpStatus.BAD_REQUEST, ex.localizedMessage, errors)
+
+        return ResponseEntity(
+            apiError, HttpHeaders(), apiError.status
+        )
     }
 
-
-//    override fun handleMethodArgumentNotValid(ex: MethodArgumentNotValidException, headers: HttpHeaders, status: HttpStatus, request: WebRequest): ResponseEntity<Any> {
-//        return ResponseEntity("fd " + ex.message, HttpStatus.BAD_REQUEST)
-//        return super.handleMethodArgumentNotValid(ex, headers, status, request)
-//    }
-
-//    protected fun handleMethodArgumentNotValid(ex: MethodArgumentNotValidException, headers: HttpHeaders?, status: HttpStatus?, request: WebRequest?): ResponseEntity<Any?>? {
-//        val fieldErrors = ex.bindingResult.fieldErrors
-//        val globalErrors = ex.bindingResult.globalErrors
-//        val errors: MutableList<String> = ArrayList(fieldErrors.size + globalErrors.size)
-//        var error: String
-//        for (fieldError in fieldErrors) {
-//            error = fieldError.field + ", " + fieldError.defaultMessage
-//            errors.add(error)
-//        }
-//        for (objectError in globalErrors) {
-//            error = objectError.objectName + ", " + objectError.defaultMessage
-//            errors.add(error)
-//        }
-//        val errorMessage = ErrorMessage(errors)
-//        return ResponseEntity<Any?>(errorMessage, headers, status)
-//    }
-
+    @ExceptionHandler(Throwable::class)
+    fun handleAll(ex: Throwable): ResponseEntity<Any?>? {
+        val apiError = ApiError(
+            HttpStatus.INTERNAL_SERVER_ERROR, ex.localizedMessage, "error occurred"
+        )
+        return ResponseEntity(
+            apiError, HttpHeaders(), apiError.status
+        )
+    }
 }

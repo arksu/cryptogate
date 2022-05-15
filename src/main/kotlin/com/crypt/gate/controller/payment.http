@@ -6,6 +6,18 @@ Content-Type: application/json
   "amount": "0.01",
   "merchantId": 1
 }
+
+###
+POST http://localhost:8810/api/payment
+Content-Type: application/json
+
+{
+  "currency": "ETH",
+  "amount": "0.01",
+  "merchantId": 1,
+  "callbackUrl": ""
+}
+
 ###
 POST http://localhost:8810/api/payment
 Content-Type: application/json
@@ -16,9 +28,12 @@ Content-Type: application/json
   "merchantId": 1,
   "callbackUrl": "sds"
 }
+
 ###
 GET http://localhost:8810/api/payment/1
+
 ###
 GET http://localhost:8810/api/payment/555
+
 ###
 GET http://localhost:8810/api/payment/fd
