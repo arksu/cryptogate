@@ -36,7 +36,14 @@ dependencies {
 
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testCompileOnly("org.springframework.boot:spring-boot-starter-test") {
+        exclude(module = "junit")
+        exclude(module = "mockito-core")
+    }
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+//    testImplementation("io.mockk:mockk:1.12.4")
+    testImplementation("com.ninja-squad:springmockk:3.1.1")
 }
 
 tasks.withType<KotlinCompile> {
