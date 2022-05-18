@@ -21,7 +21,6 @@ class PaymentControllerTest(
 ) {
     @Test
     fun test404() {
-
         mockMvc.perform(get("/api/payment/9999").accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound)
             .andExpect(jsonPath("$.timestamp", `is`(notNullValue())))
