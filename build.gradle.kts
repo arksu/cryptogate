@@ -44,6 +44,8 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 //    testImplementation("io.mockk:mockk:1.12.4")
     testImplementation("com.ninja-squad:springmockk:3.1.1")
+
+    runtimeOnly("com.h2database:h2")
 }
 
 tasks.withType<KotlinCompile> {

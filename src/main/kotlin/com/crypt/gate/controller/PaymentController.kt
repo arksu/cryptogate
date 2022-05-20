@@ -40,7 +40,7 @@ class PaymentController(
                     merchant = merchantRepo.getReferenceById(paymentDTO.merchantId),
                     status = PaymentStatus.WAITING,
                     callbackUrl = paymentDTO.callbackUrl!!,
-                    walletAddress = "!2"
+                    walletAddress = "!2" // TODO select wallet
                 )
             )
         )

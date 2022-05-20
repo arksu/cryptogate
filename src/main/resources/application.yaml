@@ -22,7 +22,7 @@ spring:
         format_sql: true
         use_sql_comments: true
         jdbc.lob.non_contextual_creation: true
-        dialect: org.hibernate.dialect.MariaDB106Dialect
+#        dialect: org.hibernate.dialect.MariaDB106Dialect
 
     hibernate:
       ddl-auto: update
