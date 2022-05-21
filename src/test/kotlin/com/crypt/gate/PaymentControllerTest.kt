@@ -15,11 +15,9 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.testcontainers.containers.MariaDBContainer
@@ -66,27 +64,33 @@ class PaymentControllerTest(
 
     @Test
     fun testCreatePayment() {
-        val body = "{\n" +
-                "  \"currency\": \"ETH\",\n" +
-                "  \"amount\": \"0.01\",\n" +
-                "  \"callbackUrl\": \"http://test.callback\",\n" +
-                "  \"merchantId\": 1\n" +
+        val body = "{" +
+                "  \"currency\": \"ETH\"," +
+                "  \"amount\": \"0.01\"," +
+                "  \"callbackUrl\": \"http://test.callback\"," +
+                "  \"merchantId\": 1" +
                 "}"
         mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/payment")
+            post("/api/payment")
                 .content(body)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
         )
-            .andExpect(MockMvcResultMatchers.status().isCreated)
+            .andExpect(status().isCreated)
+            .andDo(print())
+            .andExpect(jsonPath("$.id", `is`(1)))
+            .andExpect(jsonPath("$.currency", `is`("ETH")))
+            .andExpect(jsonPath("$.merchantId", `is`(1)))
+            .andExpect(jsonPath("$.status", `is`("WAITING")))
+            .andExpect(jsonPath("$.callbackUrl", `is`("http://test.callback")))
     }
 
     @Test
     fun testValidateError() {
-        val body = "{\n" +
-                "  \"currency\": \"ETH\",\n" +
-                "  \"amount\": \"0.01\",\n" +
-                "  \"merchantId\": 1\n" +
+        val body = "{" +
+                "  \"currency\": \"ETH\"," +
+                "  \"amount\": \"0.01\"," +
+                "  \"merchantId\": 1" +
                 "}"
         mockMvc.perform(
             post("/api/payment")
@@ -105,11 +109,11 @@ class PaymentControllerTest(
 
     @Test
     fun testValidateErrorBlank() {
-        val body = "{\n" +
-                "  \"currency\": \"ETH\",\n" +
-                "  \"amount\": \"0.01\",\n" +
-                "  \"merchantId\": 1,\n" +
-                "  \"callbackUrl\": \"\"\n" +
+        val body = "{" +
+                "  \"currency\": \"ETH\"," +
+                "  \"amount\": \"0.01\"," +
+                "  \"merchantId\": 1," +
+                "  \"callbackUrl\": \"\"" +
                 "}"
         mockMvc.perform(
             post("/api/payment")
