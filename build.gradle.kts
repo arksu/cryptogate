@@ -2,13 +2,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.springframework.boot") version "2.7.0-RC1"
-//    id("org.springframework.boot") version "2.6.7"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.6.20"
     kotlin("plugin.spring") version "1.6.20"
     kotlin("plugin.jpa") version "1.6.20"
     kotlin("plugin.allopen") version "1.6.20"
 }
+extra["testcontainersVersion"] = "1.17.2"
 
 group = "com.crypt"
 version = "0.0.1-SNAPSHOT"
@@ -45,7 +45,13 @@ dependencies {
 //    testImplementation("io.mockk:mockk:1.12.4")
     testImplementation("com.ninja-squad:springmockk:3.1.1")
 
-    runtimeOnly("com.h2database:h2")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:mariadb")
+}
+dependencyManagement {
+    imports {
+        mavenBom("org.testcontainers:testcontainers-bom:${property("testcontainersVersion")}")
+    }
 }
 
 tasks.withType<KotlinCompile> {

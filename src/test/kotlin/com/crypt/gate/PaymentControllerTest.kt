@@ -1,16 +1,16 @@
 package com.crypt.gate
 
 import org.hamcrest.Matchers.*
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -20,18 +20,43 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
+import org.testcontainers.containers.MariaDBContainer
+import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.junit.jupiter.Testcontainers
 
 
 @AutoConfigureMockMvc
-//@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
-@Transactional
-//@WebMvcTest
-@SpringBootTest
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Transactional  // ??????
+@SpringBootTest(
+//    properties = [
+//    "spring.datasource.url=jdbc:tc:mariadb:10.7-alpine:///cryptogate"
+//]
+)
+@Testcontainers
 class PaymentControllerTest(
     @Autowired
     val mockMvc: MockMvc
 ) {
+    companion object {
+        @Container
+        private val dbContainer = MariaDBContainer("mariadb:10.7").withReuse(true)
+
+        @DynamicPropertySource
+        @JvmStatic
+        fun registerDynamicProperties(registry: DynamicPropertyRegistry) {
+            registry.add("spring.datasource.url", dbContainer::getJdbcUrl)
+            registry.add("spring.datasource.username", dbContainer::getUsername)
+            registry.add("spring.datasource.password", dbContainer::getPassword)
+        }
+    }
+
+    @Test
+    fun testDatabaseIsRunning() {
+        assert(dbContainer.isRunning)
+    }
+
     @Test
     fun testCreatePayment() {
         val body = "{\n" +
