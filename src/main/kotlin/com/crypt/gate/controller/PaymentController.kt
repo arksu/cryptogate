@@ -31,7 +31,7 @@ class PaymentController(
     @ResponseStatus(HttpStatus.CREATED)
     fun createPayment(@Valid @RequestBody paymentDTO: PaymentDTO): PaymentDTO {
         // TODO: указать данные мерчанта (валидировать их)
-        println(config.eth.wallets)
+//        println(config.eth.wallets)
         return toPaymentDTO(
             paymentRepo.save(
                 Payment(
