@@ -3,10 +3,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot") version "2.7.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    kotlin("jvm") version "1.6.20"
-    kotlin("plugin.spring") version "1.6.20"
-    kotlin("plugin.jpa") version "1.6.20"
-    kotlin("plugin.allopen") version "1.6.20"
+    kotlin("jvm") version "1.6.21"
+    kotlin("plugin.spring") version "1.6.21"
+    kotlin("plugin.jpa") version "1.6.21"
+    kotlin("plugin.allopen") version "1.6.21"
 }
 extra["testcontainersVersion"] = "1.17.2"
 
@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+//    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
@@ -30,9 +30,9 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    implementation("org.jsoup:jsoup:1.14.3")
+    // html dom parser
+//    implementation("org.jsoup:jsoup:1.14.3")
 
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 
@@ -40,10 +40,6 @@ dependencies {
         exclude(module = "junit")
         exclude(module = "mockito-core")
     }
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-//    testImplementation("io.mockk:mockk:1.12.4")
-    testImplementation("com.ninja-squad:springmockk:3.1.1")
 
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mariadb")

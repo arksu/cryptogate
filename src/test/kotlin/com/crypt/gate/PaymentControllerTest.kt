@@ -24,9 +24,8 @@ import org.testcontainers.containers.MariaDBContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 
-
-@AutoConfigureMockMvc
 @SpringBootTest
+@AutoConfigureMockMvc
 @Testcontainers
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PaymentControllerTest(
@@ -53,6 +52,7 @@ class PaymentControllerTest(
 
     @BeforeAll
     fun before() {
+        // создаем тестового мерчанта
         val merchant = Merchant(0, "test")
         merchantRepo.save(merchant)
     }
