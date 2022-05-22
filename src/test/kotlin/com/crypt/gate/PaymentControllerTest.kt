@@ -64,6 +64,7 @@ class PaymentControllerTest(
 
     @Test
     fun testCreatePayment() {
+        // проверяем создание платежа
         val body = "{" +
                 "  \"currency\": \"ETH\"," +
                 "  \"amount\": \"0.01\"," +
@@ -77,6 +78,16 @@ class PaymentControllerTest(
                 .accept(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isCreated)
+            .andDo(print())
+            .andExpect(jsonPath("$.id", `is`(1)))
+            .andExpect(jsonPath("$.currency", `is`("ETH")))
+            .andExpect(jsonPath("$.merchantId", `is`(1)))
+            .andExpect(jsonPath("$.status", `is`("WAITING")))
+            .andExpect(jsonPath("$.callbackUrl", `is`("http://test.callback")))
+
+        // получим созданный платеж
+        mockMvc.perform(get("/api/payment/1"))
+            .andExpect(status().isOk)
             .andDo(print())
             .andExpect(jsonPath("$.id", `is`(1)))
             .andExpect(jsonPath("$.currency", `is`("ETH")))
