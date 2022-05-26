@@ -17,6 +17,7 @@ import javax.validation.Valid
 /**
  * Создание и работа с платежами
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/api/payment")
 class PaymentController(
