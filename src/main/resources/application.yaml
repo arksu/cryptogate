@@ -29,6 +29,10 @@ spring:
       naming.implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
       naming.physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
 
+springdoc:
+  swagger-ui:
+    use-root-path: true
+
 logging:
   level:
     org.springframework.jdbc.core.JdbcTemplate: TRACE
