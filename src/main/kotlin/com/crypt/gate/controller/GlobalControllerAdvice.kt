@@ -39,7 +39,7 @@ class GlobalControllerAdvice {
         val globalErrors = ex.bindingResult.globalErrors
         val errors: MutableList<String> = ArrayList(fieldErrors.size + globalErrors.size)
         for (fieldError in fieldErrors) {
-            errors.add("${fieldError.objectName}.${fieldError.field} : ${fieldError.defaultMessage}, rejected value [${fieldError.rejectedValue}]")
+            errors.add("${fieldError.field} : ${fieldError.defaultMessage}, rejected value [${fieldError.rejectedValue}]")
         }
         for (objectError in globalErrors) {
             errors.add("${objectError.objectName} : ${objectError.defaultMessage}")

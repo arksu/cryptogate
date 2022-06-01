@@ -53,7 +53,7 @@ class PaymentControllerTest(
     @BeforeAll
     fun before() {
         // создаем тестового мерчанта
-        val merchant = Merchant(0, "test")
+        val merchant = Merchant(0, "test", "superSecretKey")
         merchantRepo.save(merchant)
     }
 
@@ -69,7 +69,7 @@ class PaymentControllerTest(
                 "  \"currency\": \"ETH\"," +
                 "  \"amount\": \"0.01\"," +
                 "  \"callbackUrl\": \"http://test.callback\"," +
-                "  \"merchantId\": 1" +
+                "  \"secretKey\": \"superSecretKey\"" +
                 "}"
         mockMvc.perform(
             post("/api/payment")
@@ -81,9 +81,7 @@ class PaymentControllerTest(
             .andDo(print())
             .andExpect(jsonPath("$.id", `is`(1)))
             .andExpect(jsonPath("$.currency", `is`("ETH")))
-            .andExpect(jsonPath("$.merchantId", `is`(1)))
             .andExpect(jsonPath("$.status", `is`("WAITING")))
-            .andExpect(jsonPath("$.callbackUrl", `is`("http://test.callback")))
 
         // получим созданный платеж
         mockMvc.perform(get("/api/payment/1"))
@@ -91,16 +89,14 @@ class PaymentControllerTest(
             .andDo(print())
             .andExpect(jsonPath("$.id", `is`(1)))
             .andExpect(jsonPath("$.currency", `is`("ETH")))
-            .andExpect(jsonPath("$.merchantId", `is`(1)))
             .andExpect(jsonPath("$.status", `is`("WAITING")))
-            .andExpect(jsonPath("$.callbackUrl", `is`("http://test.callback")))
     }
 
     @Test
     fun testValidateError() {
         val body = "{" +
                 "  \"currency\": \"ETH\"," +
-                "  \"amount\": \"0.01\"," +
+                "  \"amount\": \"-0.01\"," +
                 "  \"merchantId\": 1" +
                 "}"
         mockMvc.perform(
@@ -112,9 +108,12 @@ class PaymentControllerTest(
             .andExpect(status().isBadRequest)
             .andExpect(jsonPath("$.timestamp", `is`(notNullValue())))
             .andExpect(jsonPath("$.errors").isArray)
-            .andExpect(jsonPath("$.errors", hasSize<String>(2)))
-            .andExpect(jsonPath("$.errors", hasItem(containsString("paymentDTO.callbackUrl : Must not be null"))))
-            .andExpect(jsonPath("$.errors", hasItem(containsString("paymentDTO.callbackUrl : Can't be blank"))))
+            .andExpect(jsonPath("$.errors", hasSize<String>(5)))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("callbackUrl : Must not be null"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("callbackUrl : Can't be blank"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("secretKey : Must not be null"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("secretKey : Can't be blank"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("amount : must be greater than 0"))))
             .andDo(print())
     }
 
@@ -124,7 +123,8 @@ class PaymentControllerTest(
                 "  \"currency\": \"ETH\"," +
                 "  \"amount\": \"0.01\"," +
                 "  \"merchantId\": 1," +
-                "  \"callbackUrl\": \"\"" +
+                "  \"callbackUrl\": \"\"," +
+                "  \"secretKey\": \"\"" +
                 "}"
         mockMvc.perform(
             post("/api/payment")
@@ -135,8 +135,9 @@ class PaymentControllerTest(
             .andExpect(status().isBadRequest)
             .andExpect(jsonPath("$.timestamp", `is`(notNullValue())))
             .andExpect(jsonPath("$.errors").isArray)
-            .andExpect(jsonPath("$.errors", hasSize<String>(1)))
-            .andExpect(jsonPath("$.errors", hasItem(containsString("paymentDTO.callbackUrl : Can't be blank"))))
+            .andExpect(jsonPath("$.errors", hasSize<String>(2)))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("callbackUrl : Can't be blank"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("secretKey : Can't be blank"))))
             .andDo(print())
     }
 

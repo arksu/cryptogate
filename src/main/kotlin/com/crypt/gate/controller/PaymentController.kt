@@ -1,6 +1,7 @@
 package com.crypt.gate.controller
 
 import com.crypt.gate.config.CryptogateConfig
+import com.crypt.gate.dto.CreatePaymentDTO
 import com.crypt.gate.dto.PaymentDTO
 import com.crypt.gate.dto.toPaymentDTO
 import com.crypt.gate.exception.ResourceNotFoundException
@@ -30,17 +31,16 @@ class PaymentController(
      */
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
-    fun createPayment(@Valid @RequestBody paymentDTO: PaymentDTO): PaymentDTO {
-        // TODO: указать данные мерчанта (валидировать их)
+    fun createPayment(@Valid @RequestBody dto: CreatePaymentDTO): PaymentDTO {
 //        println(config.eth.wallets)
         return toPaymentDTO(
             paymentRepo.save(
                 Payment(
-                    currency = paymentDTO.currency,
-                    amount = Eth.bigDecimalToBigInteger(paymentDTO.amount),
-                    merchant = merchantRepo.getReferenceById(paymentDTO.merchantId),
+                    currency = dto.currency,
+                    amount = Eth.bigDecimalToBigInteger(dto.amount),
+                    merchant = merchantRepo.findBySecretKey(dto.secretKey!!),
                     status = PaymentStatus.WAITING,
-                    callbackUrl = paymentDTO.callbackUrl!!,
+                    callbackUrl = dto.callbackUrl!!,
                     walletAddress = "!2" // TODO select wallet
                 )
             )

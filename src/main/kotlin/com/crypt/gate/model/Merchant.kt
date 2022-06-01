@@ -10,5 +10,8 @@ class Merchant(
     val id: Long = 0,
 
     @Column(nullable = false)
-    var name: String
+    var name: String,
+
+    @Column(nullable = false)
+    var secretKey : String
 )
