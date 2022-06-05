@@ -28,7 +28,7 @@ import org.testcontainers.junit.jupiter.Testcontainers
 @AutoConfigureMockMvc
 @Testcontainers
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class PaymentControllerTest(
+class InvoiceControllerTest(
     @Autowired
     val mockMvc: MockMvc,
 

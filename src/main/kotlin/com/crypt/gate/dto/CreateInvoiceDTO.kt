@@ -1,7 +1,6 @@
 package com.crypt.gate.dto
 
 import com.crypt.gate.model.PaymentCurrency
-import com.crypt.gate.model.PaymentStatus
 import com.fasterxml.jackson.annotation.JsonInclude
 import java.math.BigDecimal
 import javax.validation.constraints.NotBlank
@@ -9,7 +8,7 @@ import javax.validation.constraints.NotNull
 import javax.validation.constraints.Positive
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-data class CreatePaymentDTO(
+data class CreateInvoiceDTO(
     var id: Long,
 
     var currency: PaymentCurrency,

@@ -4,7 +4,7 @@ import com.crypt.gate.model.PaymentCurrency
 import com.crypt.gate.model.PaymentStatus
 import java.math.BigDecimal
 
-data class PaymentDTO(
+data class InvoiceDTO(
     val id: Long,
 
     val status: PaymentStatus,

@@ -7,7 +7,7 @@ import javax.persistence.*
  * платеж для мерчанта
  */
 @Entity
-class Payment(
+class Invoice(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
