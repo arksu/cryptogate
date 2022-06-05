@@ -1,5 +1,6 @@
 package com.crypt.gate.model
 
+import com.crypt.gate.util.StringUtils
 import java.math.BigInteger
 import javax.persistence.*
 
@@ -31,11 +32,17 @@ class Invoice(
      * Ссылка, которую дернем когда изменится статус платежа
      */
     @Column(nullable = false)
-    var callbackUrl : String,
+    var callbackUrl: String,
 
     /**
      * Адрес кошелька на который ждем оплату
      */
     @Column(nullable = false)
-    var walletAddress : String,
+    var walletAddress: String,
+
+    /**
+     * хэш (id) для идентификации извне, который передаем наружу
+     */
+    @Column(nullable = false)
+    val hash: String = StringUtils.generatePlainString(32),
 )

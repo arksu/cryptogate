@@ -3,12 +3,12 @@ package com.crypt.gate.controller
 import com.crypt.gate.config.CryptogateConfig
 import com.crypt.gate.dto.CreateInvoiceDTO
 import com.crypt.gate.dto.InvoiceDTO
-import com.crypt.gate.dto.toPaymentDTO
+import com.crypt.gate.dto.toInvoiceDTO
 import com.crypt.gate.exception.ResourceNotFoundException
 import com.crypt.gate.model.Invoice
 import com.crypt.gate.model.PaymentStatus
-import com.crypt.gate.repo.MerchantRepo
 import com.crypt.gate.repo.InvoiceRepo
+import com.crypt.gate.repo.MerchantRepo
 import com.crypt.gate.util.Eth
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -20,20 +20,20 @@ import javax.validation.Valid
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/api/payment")
+@RequestMapping("/api/invoice")
 class InvoiceController(
     val invoiceRepo: InvoiceRepo,
     val merchantRepo: MerchantRepo,
     val config: CryptogateConfig
 ) {
     /**
-     * Создать платеж
+     * Создать счет на оплату
      */
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
     fun createPayment(@Valid @RequestBody dto: CreateInvoiceDTO): InvoiceDTO {
 //        println(config.eth.wallets)
-        return toPaymentDTO(
+        return toInvoiceDTO(
             invoiceRepo.save(
                 Invoice(
                     currency = dto.currency,
@@ -48,12 +48,12 @@ class InvoiceController(
     }
 
     /**
-     * Получить платеж по его ид (проверить статус и тд)
+     * Получить счет по его ид (проверить статус и тд)
      */
     @GetMapping("{id}")
-    fun getPayment(@PathVariable id: String): InvoiceDTO {
+    fun getInvoice(@PathVariable id: String): InvoiceDTO {
         // TODO проверять можно ли смотреть статус этого ид (надо указать данные мерчанта)
-        val payment = invoiceRepo.findById(id.toLong())
-        return toPaymentDTO(payment.orElseThrow { ResourceNotFoundException("payment not found") })
+        val invoice = invoiceRepo.findByHash(id) ?: throw ResourceNotFoundException("Invoice not found")
+        return toInvoiceDTO(invoice)
     }
 }

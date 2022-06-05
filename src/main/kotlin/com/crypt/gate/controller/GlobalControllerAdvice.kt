@@ -26,7 +26,7 @@ class GlobalControllerAdvice {
     @ExceptionHandler(ResourceNotFoundException::class)
     fun handleNotFound(ex: ResourceNotFoundException): ResponseEntity<Any?>? {
         val apiError = ApiError(
-            HttpStatus.NOT_FOUND, ex.localizedMessage, "Not found"
+            HttpStatus.NOT_FOUND, ex.localizedMessage, ex.localizedMessage
         )
         return ResponseEntity(apiError, HttpHeaders(), apiError.status)
     }

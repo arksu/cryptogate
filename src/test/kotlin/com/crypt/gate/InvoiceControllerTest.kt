@@ -2,6 +2,7 @@ package com.crypt.gate
 
 import com.crypt.gate.model.Merchant
 import com.crypt.gate.repo.MerchantRepo
+import com.jayway.jsonpath.JsonPath
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
@@ -71,23 +72,25 @@ class InvoiceControllerTest(
                 "  \"callbackUrl\": \"http://test.callback\"," +
                 "  \"secretKey\": \"superSecretKey\"" +
                 "}"
-        mockMvc.perform(
-            post("/api/payment")
+        val result = mockMvc.perform(
+            post("/api/invoice")
                 .content(body)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isCreated)
             .andDo(print())
-            .andExpect(jsonPath("$.id", `is`(1)))
             .andExpect(jsonPath("$.currency", `is`("ETH")))
             .andExpect(jsonPath("$.status", `is`("WAITING")))
+            .andReturn()
+
+        val hash: String = JsonPath.read(result.response.contentAsString, "$.id")
 
         // получим созданный платеж
-        mockMvc.perform(get("/api/payment/1"))
+        mockMvc.perform(get("/api/invoice/$hash"))
             .andExpect(status().isOk)
             .andDo(print())
-            .andExpect(jsonPath("$.id", `is`(1)))
+            .andExpect(jsonPath("$.id", `is`(hash)))
             .andExpect(jsonPath("$.currency", `is`("ETH")))
             .andExpect(jsonPath("$.status", `is`("WAITING")))
     }
@@ -100,7 +103,7 @@ class InvoiceControllerTest(
                 "  \"merchantId\": 1" +
                 "}"
         mockMvc.perform(
-            post("/api/payment")
+            post("/api/invoice")
                 .content(body)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -127,7 +130,7 @@ class InvoiceControllerTest(
                 "  \"secretKey\": \"\"" +
                 "}"
         mockMvc.perform(
-            post("/api/payment")
+            post("/api/invoice")
                 .content(body)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -143,23 +146,25 @@ class InvoiceControllerTest(
 
     @Test
     fun test404() {
-        mockMvc.perform(get("/api/payment/9999").accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/invoice/9999").accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound)
             .andExpect(jsonPath("$.timestamp", `is`(notNullValue())))
+            .andExpect(jsonPath("$.message", `is`("Invoice not found")))
             .andExpect(jsonPath("$.errors").isArray)
             .andExpect(jsonPath("$.errors", hasSize<String>(1)))
-            .andExpect(jsonPath("$.errors", hasItem("Not found")))
+            .andExpect(jsonPath("$.errors", hasItem("Invoice not found")))
             .andDo(print())
     }
 
     @Test
-    fun testWrongNumberFormat() {
-        mockMvc.perform(get("/api/payment/wrong").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest)
+    fun testInvoiceNotFound() {
+        mockMvc.perform(get("/api/invoice/wrong").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound)
             .andExpect(jsonPath("$.timestamp", `is`(notNullValue())))
+            .andExpect(jsonPath("$.message", `is`("Invoice not found")))
             .andExpect(jsonPath("$.errors").isArray)
             .andExpect(jsonPath("$.errors", hasSize<String>(1)))
-            .andExpect(jsonPath("$.errors", hasItem("Wrong number format")))
+            .andExpect(jsonPath("$.errors", hasItem("Invoice not found")))
             .andDo(print())
     }
 }
