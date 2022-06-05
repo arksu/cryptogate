@@ -1,5 +1,6 @@
 package com.crypt.gate.util
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import java.security.SecureRandom
 
 object StringUtils {
@@ -15,5 +16,13 @@ object StringUtils {
             result.append(ALPHA_NUMERIC_CHARS[random.nextInt(charsSize)])
         }
         return result.toString()
+    }
+
+    fun asJsonString(obj: Any): String {
+        return try {
+            ObjectMapper().writeValueAsString(obj)
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
     }
 }

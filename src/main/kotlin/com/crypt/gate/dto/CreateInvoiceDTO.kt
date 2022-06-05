@@ -9,18 +9,16 @@ import javax.validation.constraints.Positive
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class CreateInvoiceDTO(
-    var id: Long,
-
-    var currency: PaymentCurrency,
+    val currency: PaymentCurrency,
 
     @field:Positive
-    var amount: BigDecimal,
+    val amount: BigDecimal,
 
     @field:NotNull(message = "Must not be null")
     @field:NotBlank(message = "Can't be blank")
-    var callbackUrl: String?,
+    val callbackUrl: String?,
 
     @field:NotNull(message = "Must not be null")
     @field:NotBlank(message = "Can't be blank")
-    var secretKey : String?
+    val secretKey : String?
 )

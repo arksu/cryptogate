@@ -2,6 +2,7 @@ package com.crypt.gate
 
 import com.crypt.gate.model.Merchant
 import com.crypt.gate.repo.MerchantRepo
+import com.crypt.gate.util.StringUtils
 import com.jayway.jsonpath.JsonPath
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Assertions
@@ -65,16 +66,15 @@ class InvoiceControllerTest(
 
     @Test
     fun testCreatePayment() {
+        val body = HashMap<String, Any>()
+        body["currency"] = "ETH"
+        body["amount"] = "0.01"
+        body["callbackUrl"] = "http://test.callback"
+        body["secretKey"] = "superSecretKey"
         // проверяем создание платежа
-        val body = "{" +
-                "  \"currency\": \"ETH\"," +
-                "  \"amount\": \"0.01\"," +
-                "  \"callbackUrl\": \"http://test.callback\"," +
-                "  \"secretKey\": \"superSecretKey\"" +
-                "}"
         val result = mockMvc.perform(
             post("/api/invoice")
-                .content(body)
+                .content(StringUtils.asJsonString(body))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
         )
@@ -97,14 +97,12 @@ class InvoiceControllerTest(
 
     @Test
     fun testValidateError() {
-        val body = "{" +
-                "  \"currency\": \"ETH\"," +
-                "  \"amount\": \"-0.01\"," +
-                "  \"merchantId\": 1" +
-                "}"
+        val body = HashMap<String, Any>()
+        body["currency"] = "ETH"
+        body["amount"] = "-0.01"
         mockMvc.perform(
             post("/api/invoice")
-                .content(body)
+                .content(StringUtils.asJsonString(body))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
         )
@@ -122,16 +120,14 @@ class InvoiceControllerTest(
 
     @Test
     fun testValidateErrorBlank() {
-        val body = "{" +
-                "  \"currency\": \"ETH\"," +
-                "  \"amount\": \"0.01\"," +
-                "  \"merchantId\": 1," +
-                "  \"callbackUrl\": \"\"," +
-                "  \"secretKey\": \"\"" +
-                "}"
+        val body = HashMap<String, Any>()
+        body["currency"] = "ETH"
+        body["amount"] = "0.01"
+        body["callbackUrl"] = ""
+        body["secretKey"] = ""
         mockMvc.perform(
             post("/api/invoice")
-                .content(body)
+                .content(StringUtils.asJsonString(body))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
         )

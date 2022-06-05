@@ -32,7 +32,6 @@ class InvoiceController(
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
     fun createPayment(@Valid @RequestBody dto: CreateInvoiceDTO): InvoiceDTO {
-//        println(config.eth.wallets)
         return toInvoiceDTO(
             invoiceRepo.save(
                 Invoice(
