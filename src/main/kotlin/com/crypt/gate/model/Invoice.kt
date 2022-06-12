@@ -8,6 +8,12 @@ import javax.persistence.*
  * Счет на оплату для клиента
  */
 @Entity
+@Table(
+    indexes = [
+        Index(columnList = "merchant, orderNumber", unique = true),
+        Index(columnList = "hash", unique = true)
+    ]
+)
 class Invoice(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,18 +37,20 @@ class Invoice(
      * Выбранная клиентом валюта оплаты
      */
     @Enumerated(EnumType.STRING)
-    val selectedCurrency : PaymentCurrency? = null,
+    @Column(nullable = true)
+    var selectedCurrency: PaymentCurrency? = null,
 
     /**
      * Сумма, которую должен заплатить клиент
      */
-    val selectedAmount : BigInteger? = null,
+    @Column(nullable = true, columnDefinition = "DECIMAL(22,0)")
+    var selectedAmount: BigInteger? = null,
 
     /**
      * Адрес кошелька на который ждем оплату
      */
-    @Column(nullable = false)
-    var walletAddress: String,
+    @Column(nullable = true)
+    var walletAddress: String? = null,
 
     /**
      * Статус оплаты
@@ -55,7 +63,13 @@ class Invoice(
      * Ссылка, которую дернем когда изменится статус платежа
      */
     @Column(nullable = false)
-    var callbackUrl: String,
+    val callbackUrl: String,
+
+    /**
+     * Внутренний номер этого заказа у мерчанта
+     */
+    @Column(nullable = false)
+    val orderNumber: String,
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     var merchant: Merchant,

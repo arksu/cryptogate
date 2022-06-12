@@ -1,6 +1,5 @@
 package com.crypt.gate.controller
 
-import com.crypt.gate.config.CryptogateConfig
 import com.crypt.gate.dto.CreateInvoiceDTO
 import com.crypt.gate.dto.InvoiceDTO
 import com.crypt.gate.dto.toInvoiceDTO
@@ -12,6 +11,7 @@ import com.crypt.gate.repo.MerchantRepo
 import com.crypt.gate.util.Eth
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
@@ -23,8 +23,7 @@ import javax.validation.Valid
 @RequestMapping("/api/invoice")
 class InvoiceController(
     val invoiceRepo: InvoiceRepo,
-    val merchantRepo: MerchantRepo,
-    val config: CryptogateConfig
+    val merchantRepo: MerchantRepo
 ) {
     /**
      * Создать счет на оплату
@@ -40,7 +39,7 @@ class InvoiceController(
                     merchant = merchantRepo.findBySecretKey(dto.secretKey!!),
                     status = PaymentStatus.WAITING,
                     callbackUrl = dto.callbackUrl!!,
-                    walletAddress = "!2" // TODO select wallet
+                    orderNumber = dto.orderNumber!!
                 )
             )
         )
@@ -49,10 +48,11 @@ class InvoiceController(
     /**
      * Получить счет по его ид (проверить статус и тд)
      */
-    @GetMapping("{id}")
-    fun getInvoice(@PathVariable id: String): InvoiceDTO {
-        // TODO проверять можно ли смотреть статус этого ид (надо указать данные мерчанта)
+    @GetMapping("{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Transactional
+    fun getInvoice(@PathVariable id: String, @RequestParam secretKey: String): InvoiceDTO {
         val invoice = invoiceRepo.findByHash(id) ?: throw ResourceNotFoundException("Invoice not found")
+        if (secretKey != invoice.merchant.secretKey) throw ResourceNotFoundException("Invoice not found")
         return toInvoiceDTO(invoice)
     }
 }

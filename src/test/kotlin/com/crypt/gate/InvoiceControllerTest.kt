@@ -71,6 +71,7 @@ class InvoiceControllerTest(
         body["amount"] = "0.01"
         body["callbackUrl"] = "http://test.callback"
         body["secretKey"] = "superSecretKey"
+        body["orderNumber"] = "G2a"
         // проверяем создание платежа
         val result = mockMvc.perform(
             post("/api/invoice")
@@ -109,7 +110,9 @@ class InvoiceControllerTest(
             .andExpect(status().isBadRequest)
             .andExpect(jsonPath("$.timestamp", `is`(notNullValue())))
             .andExpect(jsonPath("$.errors").isArray)
-            .andExpect(jsonPath("$.errors", hasSize<String>(5)))
+            .andExpect(jsonPath("$.errors", hasSize<String>(7)))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("orderNumber : Must not be null"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("orderNumber : Can't be blank"))))
             .andExpect(jsonPath("$.errors", hasItem(containsString("callbackUrl : Must not be null"))))
             .andExpect(jsonPath("$.errors", hasItem(containsString("callbackUrl : Can't be blank"))))
             .andExpect(jsonPath("$.errors", hasItem(containsString("secretKey : Must not be null"))))
@@ -125,6 +128,7 @@ class InvoiceControllerTest(
         body["amount"] = "0.01"
         body["callbackUrl"] = ""
         body["secretKey"] = ""
+        body["orderNumber"] = ""
         mockMvc.perform(
             post("/api/invoice")
                 .content(StringUtils.asJsonString(body))
@@ -134,9 +138,10 @@ class InvoiceControllerTest(
             .andExpect(status().isBadRequest)
             .andExpect(jsonPath("$.timestamp", `is`(notNullValue())))
             .andExpect(jsonPath("$.errors").isArray)
-            .andExpect(jsonPath("$.errors", hasSize<String>(2)))
+            .andExpect(jsonPath("$.errors", hasSize<String>(3)))
             .andExpect(jsonPath("$.errors", hasItem(containsString("callbackUrl : Can't be blank"))))
             .andExpect(jsonPath("$.errors", hasItem(containsString("secretKey : Can't be blank"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("orderNumber : Can't be blank"))))
             .andDo(print())
     }
 

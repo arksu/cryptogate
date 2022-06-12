@@ -8,5 +8,5 @@ data class InvoiceDTO(
     val id: String,
     val status: PaymentStatus,
     val currency: PaymentCurrency,
-    val amount: BigDecimal,
+    val amount: BigDecimal
 )

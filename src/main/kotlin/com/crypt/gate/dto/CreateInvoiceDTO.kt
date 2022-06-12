@@ -16,6 +16,10 @@ data class CreateInvoiceDTO(
 
     @field:NotNull(message = "Must not be null")
     @field:NotBlank(message = "Can't be blank")
+    val orderNumber : String?,
+
+    @field:NotNull(message = "Must not be null")
+    @field:NotBlank(message = "Can't be blank")
     val callbackUrl: String?,
 
     @field:NotNull(message = "Must not be null")
