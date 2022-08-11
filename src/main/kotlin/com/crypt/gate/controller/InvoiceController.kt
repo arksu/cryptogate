@@ -4,6 +4,7 @@ import com.crypt.gate.dto.CreateInvoiceDTO
 import com.crypt.gate.dto.InvoiceDTO
 import com.crypt.gate.dto.toInvoiceDTO
 import com.crypt.gate.exception.ResourceNotFoundException
+import com.crypt.gate.exception.WrongSecretKeyException
 import com.crypt.gate.model.Invoice
 import com.crypt.gate.model.PaymentStatus
 import com.crypt.gate.repo.InvoiceRepo
@@ -36,7 +37,7 @@ class InvoiceController(
                 Invoice(
                     currency = dto.currency,
                     amount = Eth.bigDecimalToBigInteger(dto.amount),
-                    merchant = merchantRepo.findBySecretKey(dto.secretKey!!),
+                    merchant = merchantRepo.findBySecretKey(dto.secretKey!!) ?: throw IllegalArgumentException("Wrong secret key"),
                     status = PaymentStatus.WAITING,
                     callbackUrl = dto.callbackUrl!!,
                     orderNumber = dto.orderNumber!!

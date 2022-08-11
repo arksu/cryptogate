@@ -88,7 +88,8 @@ class InvoiceControllerTest(
         val hash: String = JsonPath.read(result.response.contentAsString, "$.id")
 
         // получим созданный платеж
-        mockMvc.perform(get("/api/invoice/$hash"))
+        mockMvc.perform(get("/api/invoice/$hash")
+            .queryParam("secretKey", "superSecretKey"))
             .andExpect(status().isOk)
             .andDo(print())
             .andExpect(jsonPath("$.id", `is`(hash)))
@@ -147,7 +148,9 @@ class InvoiceControllerTest(
 
     @Test
     fun test404() {
-        mockMvc.perform(get("/api/invoice/9999").accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/invoice/9999")
+            .queryParam("secretKey", "superSecretKey")
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound)
             .andExpect(jsonPath("$.timestamp", `is`(notNullValue())))
             .andExpect(jsonPath("$.message", `is`("Invoice not found")))
@@ -159,13 +162,14 @@ class InvoiceControllerTest(
 
     @Test
     fun testInvoiceNotFound() {
-        mockMvc.perform(get("/api/invoice/wrong").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNotFound)
+        mockMvc.perform(get("/api/invoice/wrong")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isInternalServerError)
             .andExpect(jsonPath("$.timestamp", `is`(notNullValue())))
-            .andExpect(jsonPath("$.message", `is`("Invoice not found")))
+            .andExpect(jsonPath("$.message", `is`("Required request parameter 'secretKey' for method parameter type String is not present")))
             .andExpect(jsonPath("$.errors").isArray)
             .andExpect(jsonPath("$.errors", hasSize<String>(1)))
-            .andExpect(jsonPath("$.errors", hasItem("Invoice not found")))
+            .andExpect(jsonPath("$.errors", hasItem("error occurred")))
             .andDo(print())
     }
 }

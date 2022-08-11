@@ -2,7 +2,7 @@ package com.crypt.gate.controller
 
 import com.crypt.gate.dto.ApiError
 import com.crypt.gate.exception.ResourceNotFoundException
-import org.springframework.http.HttpHeaders
+import com.crypt.gate.util.LoggerDelegate
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.ResponseStatus
 
 @ControllerAdvice
 class GlobalControllerAdvice {
+    val log by LoggerDelegate()
 
     @ExceptionHandler(NumberFormatException::class)
     fun handleNumberFormatException(ex: NumberFormatException): ResponseEntity<Any?>? {
         val apiError = ApiError(
             HttpStatus.BAD_REQUEST, ex.localizedMessage, "Wrong number format"
         )
-        return ResponseEntity(apiError, HttpHeaders(), apiError.status)
+        return ResponseEntity(apiError, apiError.status)
     }
 
     @ExceptionHandler(ResourceNotFoundException::class)
@@ -28,7 +29,16 @@ class GlobalControllerAdvice {
         val apiError = ApiError(
             HttpStatus.NOT_FOUND, ex.localizedMessage, ex.localizedMessage
         )
-        return ResponseEntity(apiError, HttpHeaders(), apiError.status)
+        return ResponseEntity(apiError, apiError.status)
+    }
+
+    @ExceptionHandler(IllegalArgumentException::class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    fun handleNotFound(ex: IllegalArgumentException): ResponseEntity<ApiError>? {
+        val apiError = ApiError(
+            HttpStatus.BAD_REQUEST, ex.localizedMessage, ex.localizedMessage
+        )
+        return ResponseEntity(apiError, apiError.status)
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
@@ -48,17 +58,18 @@ class GlobalControllerAdvice {
         val apiError = ApiError(HttpStatus.BAD_REQUEST, ex.localizedMessage, errors)
 
         return ResponseEntity(
-            apiError, HttpHeaders(), apiError.status
+            apiError, apiError.status
         )
     }
 
     @ExceptionHandler(Throwable::class)
     fun handleAll(ex: Throwable): ResponseEntity<Any?>? {
+        log.error("Throwable: ${ex.message}", ex)
         val apiError = ApiError(
             HttpStatus.INTERNAL_SERVER_ERROR, ex.localizedMessage, "error occurred"
         )
         return ResponseEntity(
-            apiError, HttpHeaders(), apiError.status
+            apiError, apiError.status
         )
     }
 }
