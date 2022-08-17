@@ -1,5 +1,7 @@
 package com.crypt.gate
 
+import com.crypt.gate.const.NOT_BLANK_MESSAGE
+import com.crypt.gate.const.NOT_NULL_MESSAGE
 import com.crypt.gate.model.Merchant
 import com.crypt.gate.repo.MerchantRepo
 import com.crypt.gate.util.StringUtils
@@ -112,12 +114,12 @@ class InvoiceControllerTest(
             .andExpect(jsonPath("$.timestamp", `is`(notNullValue())))
             .andExpect(jsonPath("$.errors").isArray)
             .andExpect(jsonPath("$.errors", hasSize<String>(7)))
-            .andExpect(jsonPath("$.errors", hasItem(containsString("orderNumber : Must not be null"))))
-            .andExpect(jsonPath("$.errors", hasItem(containsString("orderNumber : Can't be blank"))))
-            .andExpect(jsonPath("$.errors", hasItem(containsString("callbackUrl : Must not be null"))))
-            .andExpect(jsonPath("$.errors", hasItem(containsString("callbackUrl : Can't be blank"))))
-            .andExpect(jsonPath("$.errors", hasItem(containsString("secretKey : Must not be null"))))
-            .andExpect(jsonPath("$.errors", hasItem(containsString("secretKey : Can't be blank"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("orderNumber : $NOT_NULL_MESSAGE"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("orderNumber : $NOT_BLANK_MESSAGE"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("callbackUrl : $NOT_NULL_MESSAGE"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("callbackUrl : $NOT_BLANK_MESSAGE"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("secretKey : $NOT_NULL_MESSAGE"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("secretKey : $NOT_BLANK_MESSAGE"))))
             .andExpect(jsonPath("$.errors", hasItem(containsString("amount : must be greater than 0"))))
             .andDo(print())
     }
@@ -140,9 +142,9 @@ class InvoiceControllerTest(
             .andExpect(jsonPath("$.timestamp", `is`(notNullValue())))
             .andExpect(jsonPath("$.errors").isArray)
             .andExpect(jsonPath("$.errors", hasSize<String>(3)))
-            .andExpect(jsonPath("$.errors", hasItem(containsString("callbackUrl : Can't be blank"))))
-            .andExpect(jsonPath("$.errors", hasItem(containsString("secretKey : Can't be blank"))))
-            .andExpect(jsonPath("$.errors", hasItem(containsString("orderNumber : Can't be blank"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("callbackUrl : $NOT_BLANK_MESSAGE"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("secretKey : $NOT_BLANK_MESSAGE"))))
+            .andExpect(jsonPath("$.errors", hasItem(containsString("orderNumber : $NOT_BLANK_MESSAGE"))))
             .andDo(print())
     }
 

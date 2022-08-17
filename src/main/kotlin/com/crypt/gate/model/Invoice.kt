@@ -25,7 +25,7 @@ class Invoice(
      */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    val currency: PaymentCurrency,
+    val currency: CryptoCurrency,
 
     /**
      * Сумма, которую желает получить мерчант
@@ -38,7 +38,7 @@ class Invoice(
      */
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
-    var selectedCurrency: PaymentCurrency? = null,
+    var selectedCurrency: CryptoCurrency? = null,
 
     /**
      * Сумма, которую должен заплатить клиент
