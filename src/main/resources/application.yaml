@@ -41,8 +41,8 @@ logging:
 cryptogate:
   eth:
     wallets:
-      - "0x222"
-      - "0x333"
+      - "0x5d62D251Ad8C39F6Ac618bb27e866353b40a5f7C"
+      - "0x7F101fE45e6649A6fB8F3F8B43ed03D353f2B90c"
   refresh:
     etherscan:
       enabled: true
