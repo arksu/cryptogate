@@ -14,6 +14,6 @@ class MerchantController {
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getMerchant() {
-
+        TODO("getMerchant")
     }
 }

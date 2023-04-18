@@ -13,7 +13,7 @@ data class CryptogateConfig(
      * Проверим адреса, которые задали в конфиге
      */
     @PostConstruct
-    fun checkAddress () {
+    fun checkAddress() {
         val regex = "^(0x)?[0-9a-f]{40}$".toRegex(setOf(RegexOption.IGNORE_CASE))
         eth.wallets.forEach {
             if (!regex.matches(it)) {

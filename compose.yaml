@@ -3,7 +3,6 @@ services:
     image: mariadb:10.7
     ports:
       - 3510:3306
-    restart: always
     volumes:
       - mariadb_cryptogate:/var/lib/mysql
     environment:
