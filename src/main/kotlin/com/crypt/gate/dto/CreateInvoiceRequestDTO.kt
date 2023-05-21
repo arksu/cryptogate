@@ -4,10 +4,10 @@ import com.crypt.gate.const.NOT_BLANK_MESSAGE
 import com.crypt.gate.const.NOT_NULL_MESSAGE
 import com.crypt.gate.model.CryptoCurrency
 import com.fasterxml.jackson.annotation.JsonInclude
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Positive
 import java.math.BigDecimal
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
-import javax.validation.constraints.Positive
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class CreateInvoiceRequestDTO(

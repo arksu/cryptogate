@@ -1,6 +1,6 @@
 package com.crypt.gate.model
 
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 class Merchant(

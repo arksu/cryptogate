@@ -1,8 +1,8 @@
 package com.crypt.gate.model
 
 import com.crypt.gate.util.StringUtils
+import jakarta.persistence.*
 import java.math.BigInteger
-import javax.persistence.*
 
 /**
  * Счет на оплату для клиента

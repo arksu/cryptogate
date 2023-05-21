@@ -1,10 +1,8 @@
 package com.crypt.gate.config
 
+import jakarta.annotation.PostConstruct
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.ConstructorBinding
-import javax.annotation.PostConstruct
 
-@ConstructorBinding
 @ConfigurationProperties(prefix = "cryptogate")
 data class CryptogateConfig(
     val eth: EthConfig

@@ -9,11 +9,11 @@ import com.crypt.gate.model.PaymentStatus
 import com.crypt.gate.repo.InvoiceRepo
 import com.crypt.gate.repo.MerchantRepo
 import com.crypt.gate.util.bigDecimalToBigInteger
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
-import javax.validation.Valid
 
 /**
  * Создание и работа с платежами

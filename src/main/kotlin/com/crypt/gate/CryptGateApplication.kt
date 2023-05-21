@@ -10,9 +10,7 @@ import java.util.*
 @SpringBootApplication
 @EnableScheduling
 @EnableConfigurationProperties(value = [CryptogateConfig::class])
-class CryptGateApplication {
-
-}
+class CryptGateApplication
 
 fun main(args: Array<String>) {
     Locale.setDefault(Locale.ROOT)

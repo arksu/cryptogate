@@ -1,12 +1,15 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.7.4"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    kotlin("jvm") version "1.7.10"
-    kotlin("plugin.spring") version "1.7.10"
-    kotlin("plugin.jpa") version "1.7.10"
-    kotlin("plugin.allopen") version "1.7.10"
+    val kotlinVersion = "1.8.21"
+    val springVersion = "3.0.7"
+
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.spring") version kotlinVersion
+    kotlin("plugin.jpa") version kotlinVersion
+    kotlin("plugin.allopen") version kotlinVersion
+    id("org.springframework.boot") version springVersion
+    id("io.spring.dependency-management") version "1.1.0"
 }
 extra["testcontainersVersion"] = "1.17.2"
 
@@ -28,6 +31,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
     implementation("org.springdoc:springdoc-openapi-ui:1.6.11")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.6.11")
 
